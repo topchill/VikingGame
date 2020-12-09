@@ -1,6 +1,7 @@
 package cegepst;
 
 import cegepst.engine.Buffer;
+import cegepst.engine.CollidableRepository;
 import cegepst.engine.controls.Direction;
 import cegepst.engine.entity.MovableEntity;
 
@@ -26,6 +27,7 @@ public class Zombies extends MovableEntity {
     public Zombies() {
         setSpeed(4);
         setDimension(32,32);
+        CollidableRepository.getInstance().registerEntity(this);
         loadSpriteSheet();
         loadFrame();
     }
@@ -70,6 +72,38 @@ public class Zombies extends MovableEntity {
             spriteSheet = ImageIO.read(this.getClass().getClassLoader().getResourceAsStream(SPRITE_PATH));
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void update(int playerX, int playerY) {
+        super.update();
+        AIPathing(playerX, playerY);
+        if (super.hasMoved()) {
+            --nextFrame;
+            if (nextFrame == 0) {
+                ++currentAnimationFrame;
+                if (currentAnimationFrame >= leftFrames.length) {
+                    currentAnimationFrame = 0;
+                }
+                nextFrame = ANIMATION_SPEED;
+            }
+        } else {
+            currentAnimationFrame = 1;
+        }
+    }
+
+    public void AIPathing(int playerX, int playerY) {
+        if (x > playerX) {
+            x =+ getSpeed();
+        }
+        if (x ) {
+
+        }
+        if () {
+
+        }
+        if () {
+
         }
     }
 }

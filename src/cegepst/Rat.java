@@ -1,6 +1,7 @@
 package cegepst;
 
 import cegepst.engine.Buffer;
+import cegepst.engine.CollidableRepository;
 import cegepst.engine.controls.Direction;
 import cegepst.engine.entity.MovableEntity;
 
@@ -26,6 +27,7 @@ public class Rat extends MovableEntity {
     public Rat() {
         setSpeed(4);
         setDimension(32,32);
+        CollidableRepository.getInstance().registerEntity(this);
         loadSpriteSheet();
         loadFrame();
     }

@@ -112,6 +112,7 @@ public class Player extends ControllableEntity {
         }
         if (soundCooldown == 0) {
             soundCooldown = 40;
+            healthPoint -= 10;
             Sound.play("sounds/best1.wav");
         }
     }

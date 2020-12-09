@@ -30,6 +30,7 @@ public class VikingGame extends Game {
     @Override
     public void update() {
         player.update();
+        zombie.update(player.getX(), player.getY());
         if (gamePad.isFirePressed()) {
             player.cooldownAttack();
         }
