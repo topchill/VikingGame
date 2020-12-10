@@ -67,7 +67,7 @@ public class RenderingEngine {
     private void initializeFrame() {
         screen = new Screen();
         screen.setSize(800, 600);
-        screen.setTitle("Moving Rectangle Game");
+        screen.setTitle("Viking Adventure");
     }
 
     private RenderingHints getOptimalRenderingHints() {

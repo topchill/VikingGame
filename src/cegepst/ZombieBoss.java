@@ -1,6 +1,7 @@
 package cegepst;
 
 import cegepst.engine.Buffer;
+import cegepst.engine.SpriteSheet;
 import cegepst.engine.controls.Direction;
 import cegepst.engine.entity.MovableEntity;
 
@@ -32,6 +33,11 @@ public class ZombieBoss extends MovableEntity {
 
     @Override
     public void draw(Buffer buffer) {
+
+    }
+
+    @Override
+    public void drawSprite(Buffer buffer, SpriteSheet spritesheet) {
         if (getDirection() == Direction.UP) {
             buffer.drawImage(upFrames[currentAnimationFrame], x, y);
         } else if (getDirection() == Direction.DOWN) {

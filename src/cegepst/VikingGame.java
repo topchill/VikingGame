@@ -1,9 +1,6 @@
 package cegepst;
 
-import cegepst.engine.Buffer;
-import cegepst.engine.Game;
-import cegepst.engine.RenderingEngine;
-import cegepst.engine.Sound;
+import cegepst.engine.*;
 
 public class VikingGame extends Game {
 
@@ -13,13 +10,16 @@ public class VikingGame extends Game {
     private Tree tree;
     private Zombies zombie;
     private Rat rat;
+    private SpriteSheet spriteSheet;
 
 
     public VikingGame() {
         gamePad = new GamePad();
-        player = new Player(gamePad);
-        zombie = new Zombies();
-        rat = new Rat();
+        spriteSheet = new SpriteSheet();
+        spriteSheet.loadSpriteSheet();
+        player = new Player(gamePad, spriteSheet);
+        zombie = new Zombies(spriteSheet);
+        rat = new Rat(spriteSheet);
         player.teleport(200, 200);
         zombie.teleport(400, 300);
         rat.teleport(50, 300);
@@ -47,13 +47,17 @@ public class VikingGame extends Game {
     @Override
     public void draw(Buffer buffer) {
         world.draw(buffer);
-        zombie.draw(buffer);
-        rat.draw(buffer);
+    }
+
+    @Override
+    public void drawSprite(Buffer buffer, SpriteSheet spriteSheet) {
+        zombie.drawSprite(buffer, spriteSheet);
+        rat.drawSprite(buffer, spriteSheet);
         if (player.getY() < tree.getY() + 52) {
-            player.draw(buffer);
+            player.drawSprite(buffer, spriteSheet);
             tree.draw(buffer);
         } else {
-            tree.draw(buffer);
+            tree.drawSprite(buffer, spriteSheet);
             player.draw(buffer);
         }
     }

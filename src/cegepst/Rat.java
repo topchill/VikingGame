@@ -2,6 +2,7 @@ package cegepst;
 
 import cegepst.engine.Buffer;
 import cegepst.engine.CollidableRepository;
+import cegepst.engine.SpriteSheet;
 import cegepst.engine.controls.Direction;
 import cegepst.engine.entity.MovableEntity;
 
@@ -24,18 +25,21 @@ public class Rat extends MovableEntity {
     private int currentAnimationFrame = 1;
     private int nextFrame = ANIMATION_SPEED;
 
-    public Rat() {
-        setSpeed(4);
+    public Rat(SpriteSheet spriteSheet) {
+        setSpeed(1);
         setDimension(32,32);
         CollidableRepository.getInstance().registerEntity(this);
         loadSpriteSheet();
         loadFrame();
     }
 
-
-
     @Override
     public void draw(Buffer buffer) {
+
+    }
+
+    @Override
+    public void drawSprite(Buffer buffer, SpriteSheet spriteSheet) {
         if (getDirection() == Direction.UP) {
             buffer.drawImage(upFrames[currentAnimationFrame], x, y);
         } else if (getDirection() == Direction.DOWN) {
@@ -75,5 +79,38 @@ public class Rat extends MovableEntity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void update(int playerX, int playerY) {
+        super.update();
+        AIPathing(playerX, playerY);
+        if (super.hasMoved()) {
+            --nextFrame;
+            if (nextFrame == 0) {
+                ++currentAnimationFrame;
+                if (currentAnimationFrame >= leftFrames.length) {
+                    currentAnimationFrame = 0;
+                }
+                nextFrame = ANIMATION_SPEED;
+            }
+        } else {
+            currentAnimationFrame = 1;
+        }
+    }
+
+    public void AIPathing(int playerX, int playerY) {
+        if (x > playerX) {
+            moveLeft();
+        }
+        if (x < playerX) {
+            moveRight();
+        }
+        if (y < playerY) {
+            moveDown();
+        }
+        if (y > playerY) {
+            moveUp();
+        }
+
     }
 }

@@ -16,6 +16,7 @@ public abstract class Game {
     public abstract void conclude();
     public abstract void update();
     public abstract void draw(Buffer buffer);
+    public abstract void drawSprite(Buffer buffer, SpriteSheet spriteSheet);
 
     public void start() {
         initialize();

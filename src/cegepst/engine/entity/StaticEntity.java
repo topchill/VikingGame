@@ -1,6 +1,7 @@
 package cegepst.engine.entity;
 
 import cegepst.engine.Buffer;
+import cegepst.engine.SpriteSheet;
 
 import java.awt.*;
 
@@ -12,6 +13,7 @@ public abstract class StaticEntity {
     protected int height;
 
     public abstract void draw(Buffer buffer);
+    public abstract void drawSprite(Buffer buffer, SpriteSheet spriteSheet);
 
     public void teleport(int x, int y) {
         this.x = x;

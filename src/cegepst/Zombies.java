@@ -2,6 +2,7 @@ package cegepst;
 
 import cegepst.engine.Buffer;
 import cegepst.engine.CollidableRepository;
+import cegepst.engine.SpriteSheet;
 import cegepst.engine.controls.Direction;
 import cegepst.engine.entity.MovableEntity;
 
@@ -14,7 +15,7 @@ public class Zombies extends MovableEntity {
 
     private static final String SPRITE_PATH = "images/player.png";
     private static int ANIMATION_SPEED = 8;
-    private int healthPoint = 10;
+    private int healthPoint = 20;
     private int soundCooldown;
     private BufferedImage spriteSheet;
     private Image[] upFrames;
@@ -24,8 +25,8 @@ public class Zombies extends MovableEntity {
     private int currentAnimationFrame = 1;
     private int nextFrame = ANIMATION_SPEED;
 
-    public Zombies() {
-        setSpeed(4);
+    public Zombies(SpriteSheet spriteSheet) {
+        setSpeed(1);
         setDimension(32,32);
         CollidableRepository.getInstance().registerEntity(this);
         loadSpriteSheet();
@@ -34,6 +35,11 @@ public class Zombies extends MovableEntity {
 
     @Override
     public void draw(Buffer buffer) {
+
+    }
+
+    @Override
+    public void drawSprite(Buffer buffer, SpriteSheet spriteSheet) {
         if (getDirection() == Direction.UP) {
             buffer.drawImage(upFrames[currentAnimationFrame], x, y);
         } else if (getDirection() == Direction.DOWN) {
@@ -94,16 +100,17 @@ public class Zombies extends MovableEntity {
 
     public void AIPathing(int playerX, int playerY) {
         if (x > playerX) {
-            x =+ getSpeed();
+            moveLeft();
         }
-        if (x ) {
+        if (x < playerX) {
+            moveRight();
+        }
+        if (y < playerY) {
+            moveDown();
+        }
+        if (y > playerY) {
+            moveUp();
+        }
 
-        }
-        if () {
-
-        }
-        if () {
-
-        }
     }
 }

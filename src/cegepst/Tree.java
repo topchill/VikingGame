@@ -1,6 +1,7 @@
 package cegepst;
 
 import cegepst.engine.Buffer;
+import cegepst.engine.SpriteSheet;
 import cegepst.engine.entity.StaticEntity;
 
 import javax.imageio.ImageIO;
@@ -41,5 +42,10 @@ public class Tree extends StaticEntity {
     public void draw(Buffer buffer) {
         buffer.drawImage(image, x, y);
         blockade.draw(buffer);
+    }
+
+    @Override
+    public void drawSprite(Buffer buffer, SpriteSheet spriteSheet) {
+
     }
 }

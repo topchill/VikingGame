@@ -1,7 +1,9 @@
 package cegepst;
 
 import cegepst.engine.Buffer;
+import cegepst.engine.CollidableRepository;
 import cegepst.engine.Sound;
+import cegepst.engine.SpriteSheet;
 import cegepst.engine.controls.Direction;
 import cegepst.engine.controls.MovementController;
 import cegepst.engine.entity.ControllableEntity;
@@ -17,7 +19,6 @@ public class Player extends ControllableEntity {
     private static int ANIMATION_SPEED = 8;
     private int healthPoint = 100;
     private int soundCooldown;
-    private BufferedImage spriteSheet;
     private Image[] upFrames;
     private Image[] downFrames;
     private Image[] rightFrames;
@@ -25,34 +26,17 @@ public class Player extends ControllableEntity {
     private int currentAnimationFrame = 1;
     private int nextFrame = ANIMATION_SPEED;
 
-    public Player(MovementController controller) {
+    public Player(MovementController controller, SpriteSheet spriteSheet) {
         super(controller);
-        setSpeed(4);
+        setSpeed(3);
+        CollidableRepository.getInstance().registerEntity(this);
         setDimension(32,32);
         loadSpriteSheet();
         loadFrame();
     }
 
     private void loadFrame() {
-        downFrames = new Image[3];
-        downFrames[0] = spriteSheet.getSubimage(0, 128, width, height);
-        downFrames[1] = spriteSheet.getSubimage(32, 128, width, height);
-        downFrames[2] = spriteSheet.getSubimage(64, 128, width, height);
-
-        leftFrames = new Image[3];
-        leftFrames[0] = spriteSheet.getSubimage(0, 160, width, height);
-        leftFrames[1] = spriteSheet.getSubimage(32, 160, width, height);
-        leftFrames[2] = spriteSheet.getSubimage(64, 160, width, height);
-
-        rightFrames = new Image[3];
-        rightFrames[0] = spriteSheet.getSubimage(0, 192, width, height);
-        rightFrames[1] = spriteSheet.getSubimage(32, 192, width, height);
-        rightFrames[2] = spriteSheet.getSubimage(64, 192, width, height);
-
-        upFrames = new Image[3];
-        upFrames[0] = spriteSheet.getSubimage(0, 224, width, height);
-        upFrames[1] = spriteSheet.getSubimage(32, 224, width, height);
-        upFrames[2] = spriteSheet.getSubimage(64, 224, width, height);
+        spri
     }
 
     private void loadSpriteSheet() {
@@ -93,16 +77,12 @@ public class Player extends ControllableEntity {
 
     @Override
     public void draw(Buffer buffer) {
-        if (getDirection() == Direction.UP) {
-            buffer.drawImage(upFrames[currentAnimationFrame], x, y);
-        } else if (getDirection() == Direction.DOWN) {
-            buffer.drawImage(downFrames[currentAnimationFrame], x, y);
-        } else if (getDirection() == Direction.RIGHT) {
-            buffer.drawImage(rightFrames[currentAnimationFrame], x, y);
-        } else {
-            buffer.drawImage(leftFrames[currentAnimationFrame], x, y);
-        }
-        drawHealth(buffer);
+
+    }
+
+    @Override
+    public void drawSprite(Buffer buffer, SpriteSheet spriteSheet) {
+        spriteSheet.directionDraw();
     }
 
     public void cooldownAttack() {
