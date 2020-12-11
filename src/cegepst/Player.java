@@ -2,70 +2,40 @@ package cegepst;
 
 import cegepst.engine.Buffer;
 import cegepst.engine.CollidableRepository;
-import cegepst.engine.Sound;
 import cegepst.engine.SpriteSheet;
-import cegepst.engine.controls.Direction;
 import cegepst.engine.controls.MovementController;
 import cegepst.engine.entity.ControllableEntity;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
+import java.util.ArrayList;
 
 public class Player extends ControllableEntity {
 
-    private static final String SPRITE_PATH = "images/player.png";
-    private static int ANIMATION_SPEED = 8;
     private int healthPoint = 100;
     private int soundCooldown;
-    private Image[] upFrames;
-    private Image[] downFrames;
-    private Image[] rightFrames;
-    private Image[] leftFrames;
+    private ArrayList<Sword> swords;
     private int currentAnimationFrame = 1;
     private int nextFrame = ANIMATION_SPEED;
+    private static int ANIMATION_SPEED = 8;
+    private boolean isAttacking = false;
+    private int frameAction = 0;
 
-    public Player(MovementController controller, SpriteSheet spriteSheet) {
+    public Player(MovementController controller) {
         super(controller);
         setSpeed(3);
         CollidableRepository.getInstance().registerEntity(this);
         setDimension(32,32);
-        loadSpriteSheet();
-        loadFrame();
-    }
-
-    private void loadFrame() {
-        spri
-    }
-
-    private void loadSpriteSheet() {
-        try {
-            spriteSheet = ImageIO.read(this.getClass().getClassLoader().getResourceAsStream(SPRITE_PATH));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        swords = new ArrayList<>();
+        swords.add(Sword.Factory.woodenSword());
     }
 
     @Override
     public void update() {
         super.update();
         moveAccordingToHandler();
-        if (super.hasMoved()) {
-            --nextFrame;
-            if (nextFrame == 0) {
-                ++currentAnimationFrame;
-                if (currentAnimationFrame >= leftFrames.length) {
-                    currentAnimationFrame = 0;
-                }
-                nextFrame = ANIMATION_SPEED;
-            }
-        } else {
-            currentAnimationFrame = 1;
-        }
     }
 
-    private void drawHealth(Buffer buffer) {
+    public void drawHealth(Buffer buffer) {
         int heart = healthPoint / 10;
         int x= 20;
         for (int i = 0; i < heart; i++) {
@@ -82,18 +52,53 @@ public class Player extends ControllableEntity {
 
     @Override
     public void drawSprite(Buffer buffer, SpriteSheet spriteSheet) {
-        spriteSheet.directionDraw();
+        spriteSheet.loadFrame(0, 128, width, height);
+        spriteSheet.directionDraw(getDirection(), x, y, buffer, currentAnimationFrame);
+        if (super.hasMoved()) {
+            --nextFrame;
+            if (nextFrame == 0) {
+                ++currentAnimationFrame;
+                if (currentAnimationFrame >= 3) {
+                    currentAnimationFrame = 0;
+                }
+                nextFrame = ANIMATION_SPEED;
+            }
+        } else {
+            currentAnimationFrame = 1;
+        }
+
+        if (isAttacking || frameAction > 0) {
+            for (Sword sword: swords) {
+                if (sword.isSelected()) {
+                    sword.draw(buffer, x, y, getDirection());
+                    frameAction--;
+                }
+            }
+        }
     }
 
     public void cooldownAttack() {
         soundCooldown--;
+        isAttacking = false;
         if (soundCooldown < 0) {
             soundCooldown = 0;
         }
         if (soundCooldown == 0) {
-            soundCooldown = 40;
-            healthPoint -= 10;
-            Sound.play("sounds/best1.wav");
+            System.out.println("bob");
+            soundCooldown = 30;
+            isAttacking = true;
+            frameAction = 10;
         }
+
+
+    }
+
+    public void pickup() {
+        for (Sword sword: swords) {
+            if (sword.isSelected()) {
+                sword.unselectedSword();
+            }
+        }
+        swords.add(Sword.Factory.ironSword());
     }
 }

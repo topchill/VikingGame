@@ -6,19 +6,19 @@ public enum Direction {
     UP(0, -1),
     DOWN(0, 1);
 
-    private final int xMultiplier;
-    private final int yMultiplier;
+    private final double xMultiplier;
+    private final double yMultiplier;
 
-    Direction(int xMultiplier, int yMultiplier) {
+    Direction(double xMultiplier, double yMultiplier) {
         this.xMultiplier = xMultiplier;
         this.yMultiplier = yMultiplier;
     }
 
-    public int getVelocityX(int speed) {
+    public double getVelocityX(int speed) {
         return xMultiplier * speed;
     }
 
-    public int getVelocityY(int speed) {
+    public double getVelocityY(int speed) {
         return yMultiplier * speed;
     }
 }

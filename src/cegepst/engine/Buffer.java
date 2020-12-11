@@ -1,6 +1,10 @@
 package cegepst.engine;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
 
 public class Buffer {
 
@@ -50,5 +54,30 @@ public class Buffer {
 
     public void drawImage(Image image, int x, int y) {
         graphics.drawImage(image, x, y, null);
+    }
+
+    public BufferedImage rotateImageByDegrees(BufferedImage img, double angle, int imageX, int imageY) {
+
+        double rads = Math.toRadians(0);
+        double sin = Math.abs(Math.sin(rads)), cos = Math.abs(Math.cos(rads));
+        int w = img.getWidth();
+        int h = img.getHeight();
+        int newWidth = (int) Math.floor(w * cos + h * sin);
+        int newHeight = (int) Math.floor(h * cos + w * sin);
+
+        BufferedImage rotated = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
+        AffineTransform at = new AffineTransform();
+        at.translate((newWidth - w) / 2, (newHeight - h) / 2);
+
+        int x = w / 2;
+        int y = h / 2;
+
+        at.rotate(rads, x, y);
+        graphics.setTransform(at);
+        graphics.drawImage(img, imageX, imageY, null);
+        graphics.drawRect(0, 0, newWidth - 1, newHeight - 1);
+        graphics.dispose();
+
+        return rotated;
     }
 }

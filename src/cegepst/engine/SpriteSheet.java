@@ -6,6 +6,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Arrays;
 
 public class SpriteSheet {
     private Image[] upFrames;
@@ -13,10 +14,8 @@ public class SpriteSheet {
     private Image[] rightFrames;
     private Image[] leftFrames;
     private BufferedImage spriteSheet;
-    private int currentAnimationFrame = 1;
-    private int nextFrame = ANIMATION_SPEED;
     private static final String SPRITE_PATH = "images/player.png";
-    private static int ANIMATION_SPEED = 8;
+
 
 
 
@@ -26,20 +25,6 @@ public class SpriteSheet {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public void animation() {
-        --nextFrame;
-        if (nextFrame == 0) {
-            ++currentAnimationFrame;
-            if (currentAnimationFrame >= leftFrames.length) {
-                currentAnimationFrame = 0;
-            }
-            nextFrame = ANIMATION_SPEED;
-        }
-    } else {
-        currentAnimationFrame = 1;
-    }
     }
 
     public void loadFrame(int x, int y, int width, int height) {
@@ -64,16 +49,15 @@ public class SpriteSheet {
         upFrames[2] = spriteSheet.getSubimage(x + 64, y + 96, width, height);
     }
 
-    public void directionDraw() {
-        if (getDirection() == Direction.UP) {
-            buffer.drawImage(upFrames[currentAnimationFrame], x, y);
-        } else if (getDirection() == Direction.DOWN) {
+    public void directionDraw(Direction direction, int x, int y, Buffer buffer, int currentAnimationFrame) {
+        if (direction == Direction.UP) {
+            buffer.drawImage(this.upFrames[currentAnimationFrame], x, y);
+        } else if (direction == Direction.DOWN) {
             buffer.drawImage(downFrames[currentAnimationFrame], x, y);
-        } else if (getDirection() == Direction.RIGHT) {
+        } else if (direction == Direction.RIGHT) {
             buffer.drawImage(rightFrames[currentAnimationFrame], x, y);
         } else {
             buffer.drawImage(leftFrames[currentAnimationFrame], x, y);
         }
-        drawHealth(buffer);
     }
 }

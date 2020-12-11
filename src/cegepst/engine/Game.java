@@ -6,6 +6,7 @@ public abstract class Game {
 
     private RenderingEngine renderingEngine;
     private GameTime gameTime;
+    private SpriteSheet spriteSheet;
     private boolean playing = true;
 
     public Game() {
@@ -34,10 +35,15 @@ public abstract class Game {
 
     private void run() {
         renderingEngine.start();
+        spriteSheet = new SpriteSheet();
+        spriteSheet.loadSpriteSheet();
         gameTime = new GameTime();
+
         while (playing) {
             update();
-            draw(renderingEngine.getRenderingBuffer());
+            Buffer buffer = renderingEngine.getRenderingBuffer();
+            draw(buffer);
+            drawSprite(buffer, spriteSheet);
             renderingEngine.renderBufferOnScreen();
             gameTime.synchronize();
         }

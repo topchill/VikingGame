@@ -2,63 +2,80 @@ package cegepst;
 
 import cegepst.engine.*;
 
+import java.util.ArrayList;
+
 public class VikingGame extends Game {
 
     private GamePad gamePad;
     private Player player;
     private World world;
-    private Tree tree;
+    private ArrayList<Tree> trees;
     private Zombies zombie;
     private Rat rat;
     private SpriteSheet spriteSheet;
+    private Sword sword;
 
 
     public VikingGame() {
         gamePad = new GamePad();
         spriteSheet = new SpriteSheet();
         spriteSheet.loadSpriteSheet();
-        player = new Player(gamePad, spriteSheet);
-        zombie = new Zombies(spriteSheet);
-        rat = new Rat(spriteSheet);
+        player = new Player(gamePad);
+        zombie = new Zombies();
+        rat = new Rat();
+        trees = new ArrayList<>();
         player.teleport(200, 200);
         zombie.teleport(400, 300);
         rat.teleport(50, 300);
         world = new World();
-        tree = new Tree(100, 100);
+        trees.add(new Tree(500, 100));
+        trees.add(new Tree(500, 100));
+        trees.add(new Tree(500, 100));
+        trees.add(new Tree(500, 100));
+        trees.add(new Tree(500, 100));
+        trees.add(new Tree(500, 100));
+        trees.add(new Tree(500, 100));
     }
 
     @Override
     public void update() {
         player.update();
         zombie.update(player.getX(), player.getY());
+        rat.update(player.getX(), player.getY());
         if (gamePad.isFirePressed()) {
             player.cooldownAttack();
         }
         if (gamePad.isQuitPressed()) {
             super.stop();
         }
-        if (player.getY() < tree.getY() + 52) {
-            tree.blockadeFromTop();
-        } else {
-            tree.blockadeFromBottom();
+        for (Tree tree: trees) {
+            if (player.getY() < tree.getY() + 52) {
+                tree.blockadeFromTop();
+            } else {
+                tree.blockadeFromBottom();
+            }
         }
+
     }
 
     @Override
     public void draw(Buffer buffer) {
         world.draw(buffer);
+        player.drawHealth(buffer);
     }
 
     @Override
     public void drawSprite(Buffer buffer, SpriteSheet spriteSheet) {
         zombie.drawSprite(buffer, spriteSheet);
         rat.drawSprite(buffer, spriteSheet);
-        if (player.getY() < tree.getY() + 52) {
-            player.drawSprite(buffer, spriteSheet);
-            tree.draw(buffer);
-        } else {
-            tree.drawSprite(buffer, spriteSheet);
-            player.draw(buffer);
+        for (Tree tree: trees) {
+            if (player.getY() < tree.getY() + 52) {
+                player.drawSprite(buffer, spriteSheet);
+                tree.draw(buffer);
+            } else {
+                tree.draw(buffer);
+                player.drawSprite(buffer, spriteSheet);
+            }
         }
     }
 
