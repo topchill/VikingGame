@@ -16,7 +16,7 @@ public class Player extends ControllableEntity {
     private ArrayList<Sword> swords;
     private int currentAnimationFrame = 1;
     private int nextFrame = ANIMATION_SPEED;
-    private static int ANIMATION_SPEED = 8;
+    private static int ANIMATION_SPEED = 50;
     private boolean isAttacking = false;
     private int frameAction = 0;
 
@@ -84,10 +84,9 @@ public class Player extends ControllableEntity {
             soundCooldown = 0;
         }
         if (soundCooldown == 0) {
-            System.out.println("bob");
             soundCooldown = 30;
             isAttacking = true;
-            frameAction = 10;
+            frameAction = 100;
         }
 
 

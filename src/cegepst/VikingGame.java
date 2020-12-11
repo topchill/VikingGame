@@ -28,13 +28,15 @@ public class VikingGame extends Game {
         zombie.teleport(400, 300);
         rat.teleport(50, 300);
         world = new World();
-        trees.add(new Tree(500, 100));
-        trees.add(new Tree(500, 100));
-        trees.add(new Tree(500, 100));
-        trees.add(new Tree(500, 100));
-        trees.add(new Tree(500, 100));
-        trees.add(new Tree(500, 100));
-        trees.add(new Tree(500, 100));
+        trees.add(new Tree(125, 100));
+        trees.add(new Tree(155, 150));
+        trees.add(new Tree(10, 100));
+        trees.add(new Tree(250, 100));
+        trees.add(new Tree(300, 200));
+        trees.add(new Tree(400, 250));
+        trees.add(new Tree(180, 400));
+        trees.add(new Tree(700, 450));
+        trees.add(new Tree(500, 300));
     }
 
     @Override
