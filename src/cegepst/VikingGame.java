@@ -2,6 +2,7 @@ package cegepst;
 
 import cegepst.engine.*;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public class VikingGame extends Game {
@@ -10,10 +11,13 @@ public class VikingGame extends Game {
     private Player player;
     private World world;
     private ArrayList<Tree> trees;
+    private Sword swords;
     private Zombies zombie;
     private Rat rat;
+    private Reaper reaper;
     private SpriteSheet spriteSheet;
-    private Sword sword;
+    private boolean pickup = false;
+    private int frameAction = 0;
 
 
     public VikingGame() {
@@ -23,10 +27,12 @@ public class VikingGame extends Game {
         player = new Player(gamePad);
         zombie = new Zombies();
         rat = new Rat();
+        reaper = new Reaper();
         trees = new ArrayList<>();
         player.teleport(200, 200);
         zombie.teleport(400, 300);
         rat.teleport(50, 300);
+        reaper.teleport(550, 500);
         world = new World();
         trees.add(new Tree(125, 100));
         trees.add(new Tree(155, 150));
@@ -44,6 +50,7 @@ public class VikingGame extends Game {
         player.update();
         zombie.update(player.getX(), player.getY());
         rat.update(player.getX(), player.getY());
+        reaper.update(player.getX(), player.getY());
         if (gamePad.isFirePressed()) {
             player.cooldownAttack();
         }
@@ -70,6 +77,8 @@ public class VikingGame extends Game {
     public void drawSprite(Buffer buffer, SpriteSheet spriteSheet) {
         zombie.drawSprite(buffer, spriteSheet);
         rat.drawSprite(buffer, spriteSheet);
+        reaper.drawSprite(buffer, spriteSheet);
+
         for (Tree tree: trees) {
             if (player.getY() < tree.getY() + 52) {
                 player.drawSprite(buffer, spriteSheet);
@@ -78,6 +87,17 @@ public class VikingGame extends Game {
                 tree.draw(buffer);
                 player.drawSprite(buffer, spriteSheet);
             }
+        }
+
+        swords = new Sword();
+        if (!pickup) {
+            swords.draw(buffer);
+        }
+        if (player.intersectWith(swords) && (!pickup || frameAction < 50)) {
+            buffer.drawText("Diamond sword picked up !", 260, 550, Color.WHITE);
+            frameAction++;
+            player.pickupDiamondSword();
+            pickup = true;
         }
     }
 

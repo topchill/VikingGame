@@ -3,23 +3,17 @@ package cegepst;
 import cegepst.engine.Buffer;
 import cegepst.engine.CollidableRepository;
 import cegepst.engine.SpriteSheet;
-import cegepst.engine.controls.Direction;
 import cegepst.engine.entity.MovableEntity;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-
-public class Rat extends MovableEntity {
-
+public class Reaper extends MovableEntity {
     private static int ANIMATION_SPEED = 8;
     private int healthPoint = 10;
+    private int soundCooldown;
     private int currentAnimationFrame = 1;
     private int nextFrame = ANIMATION_SPEED;
 
-    public Rat() {
-        setSpeed(2);
+    public Reaper() {
+        setSpeed(1);
         setDimension(32,32);
         CollidableRepository.getInstance().registerEntity(this);
     }
@@ -31,7 +25,7 @@ public class Rat extends MovableEntity {
 
     @Override
     public void drawSprite(Buffer buffer, SpriteSheet spriteSheet) {
-        spriteSheet.loadFrame(96, 0, width, height);
+        spriteSheet.loadFrame(288, 0, width, height);
         spriteSheet.directionDraw(getDirection(), x, y, buffer, currentAnimationFrame);
         if (super.hasMoved()) {
             --nextFrame;

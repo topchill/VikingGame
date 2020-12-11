@@ -2,6 +2,7 @@ package cegepst;
 
 import cegepst.engine.Buffer;
 import cegepst.engine.CollidableRepository;
+import cegepst.engine.Sound;
 import cegepst.engine.SpriteSheet;
 import cegepst.engine.controls.MovementController;
 import cegepst.engine.entity.ControllableEntity;
@@ -19,6 +20,7 @@ public class Player extends ControllableEntity {
     private static int ANIMATION_SPEED = 50;
     private boolean isAttacking = false;
     private int frameAction = 0;
+    private boolean isDiamondPickedUp;
 
     public Player(MovementController controller) {
         super(controller);
@@ -85,6 +87,7 @@ public class Player extends ControllableEntity {
         }
         if (soundCooldown == 0) {
             soundCooldown = 30;
+            Sound.playMP3("sounds/swordSwing.mp3", false);
             isAttacking = true;
             frameAction = 100;
         }
@@ -92,12 +95,26 @@ public class Player extends ControllableEntity {
 
     }
 
-    public void pickup() {
+    public void pickupIronSword() {
         for (Sword sword: swords) {
             if (sword.isSelected()) {
                 sword.unselectedSword();
             }
         }
         swords.add(Sword.Factory.ironSword());
+    }
+
+    public void pickupDiamondSword() {
+        isDiamondPickedUp();
+        for (Sword sword: swords) {
+            if (sword.isSelected()) {
+                sword.unselectedSword();
+            }
+        }
+        swords.add(Sword.Factory.diamondSword());
+    }
+
+    public boolean isDiamondPickedUp() {
+        return isDiamondPickedUp = true;
     }
 }
